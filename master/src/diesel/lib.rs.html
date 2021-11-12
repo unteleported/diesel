@@ -435,6 +435,10 @@
 <span id="435">435</span>
 <span id="436">436</span>
 <span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
 </pre><pre class="rust"><code><span class="doccomment">//! # Diesel</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Diesel is an ORM and query builder designed to reduce the boilerplate for database interactions.</span>
@@ -638,8 +642,7 @@
     <span class="doccomment">//! `users.filter(first_name.eq(&quot;John&quot;)).order(last_name.asc()).limit(10)` would</span>
     <span class="doccomment">//! be `Limit&lt;Order&lt;FindBy&lt;users, first_name, &amp;str&gt;, Asc&lt;last_name&gt;&gt;&gt;`</span>
     <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::query_builder::combination_clause</span>::{<span class="self">self</span>, <span class="ident">CombinationClause</span>};
-    <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::query_builder::locking_clause</span> <span class="kw">as</span> <span class="ident">lock</span>;
-    <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::query_builder::AsQuery</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::query_builder</span>::{<span class="ident">locking_clause</span> <span class="kw">as</span> <span class="ident">lock</span>, <span class="ident">AsQuery</span>};
     <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::query_dsl::methods</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::query_dsl</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::query_source::joins</span>;
@@ -809,6 +812,11 @@
     <span class="doccomment">/// Which conveniently lets you omit the exact join condition.</span>
     <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">LeftJoinQuerySource</span><span class="op">&lt;</span><span class="ident">Left</span>, <span class="ident">Right</span>, <span class="ident">On</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">Left</span> <span class="kw">as</span> <span class="ident">joins::JoinTo</span><span class="op">&lt;</span><span class="ident">Right</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::OnClause</span><span class="op">&gt;</span> <span class="op">=</span>
         <span class="ident">JoinQuerySource</span><span class="op">&lt;</span><span class="ident">Left</span>, <span class="ident">Right</span>, <span class="ident">joins::LeftOuter</span>, <span class="ident">On</span><span class="op">&gt;</span>;
+
+    <span class="doccomment">/// Represents the return type of `.only()`</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;postgres_backend&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">SelectFromOnly</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span>
+        <span class="ident"><span class="kw">crate</span>::query_builder::SelectStatement</span><span class="op">&lt;</span><span class="ident"><span class="kw">crate</span>::pg::query_builder::only_clause::Only</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 }
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">prelude</span> {

@@ -351,6 +351,9 @@
 <span id="351">351</span>
 <span id="352">352</span>
 <span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Contains traits responsible for the actual construction of SQL statements</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! The types in this module are part of Diesel&#39;s public API, but are generally</span>
@@ -422,6 +425,9 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::returning_clause::ReturningClause</span>;
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use</span> <span class="ident"><span class="self">self</span>::insert_statement::ColumnList</span>;
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;postgres_backend&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::pg::query_builder::only_clause::Only</span>;
 
 <span class="kw">use</span> <span class="ident">std::error::Error</span>;
 

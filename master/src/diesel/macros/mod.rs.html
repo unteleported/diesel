@@ -1520,6 +1520,27 @@
 <span id="1520">1520</span>
 <span id="1521">1521</span>
 <span id="1522">1522</span>
+<span id="1523">1523</span>
+<span id="1524">1524</span>
+<span id="1525">1525</span>
+<span id="1526">1526</span>
+<span id="1527">1527</span>
+<span id="1528">1528</span>
+<span id="1529">1529</span>
+<span id="1530">1530</span>
+<span id="1531">1531</span>
+<span id="1532">1532</span>
+<span id="1533">1533</span>
+<span id="1534">1534</span>
+<span id="1535">1535</span>
+<span id="1536">1536</span>
+<span id="1537">1537</span>
+<span id="1538">1538</span>
+<span id="1539">1539</span>
+<span id="1540">1540</span>
+<span id="1541">1541</span>
+<span id="1542">1542</span>
+<span id="1543">1543</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">unused_parens</span>)]</span> <span class="comment">// FIXME: Remove this attribute once false positive is resolved.</span>
 <span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">rustfmt</span>, <span class="ident">rustfmt_skip</span>)]</span> <span class="comment">// https://github.com/rust-lang-nursery/rustfmt/issues/2755</span>
 
@@ -1547,6 +1568,24 @@
     (@<span class="ident">expand_import</span>: $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Type</span>:<span class="ident">tt</span>)<span class="op">+</span>) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="kw">use</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Type</span>)<span class="op">+</span>;
     }
+}
+
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;postgres_backend&quot;</span>)]</span>
+<span class="macro">macro_rules!</span> <span class="ident">__diesel_internal_table_backend_specific_impls</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">table</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">column_name</span>:<span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> { 
+        <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::expression::AppearsOnTable</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::query_builder::Only</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">table</span><span class="op">&gt;</span><span class="op">&gt;</span>
+            <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">column_name</span> {}
+        <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::expression::SelectableExpression</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::query_builder::Only</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">table</span><span class="op">&gt;</span><span class="op">&gt;</span>
+            <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">column_name</span> {}
+    };
+}
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;postgres_backend&quot;</span>))]</span>
+<span class="macro">macro_rules!</span> <span class="ident">__diesel_internal_table_backend_specific_impls</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">table</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">column_name</span>:<span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> {};
 }
 
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
@@ -1656,6 +1695,9 @@
                 <span class="self">self</span>.<span class="ident">eq</span>(<span class="ident">rhs</span>)
             }
         }
+
+
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__diesel_internal_table_backend_specific_impls!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">table</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">column_name</span>);
 
         <span class="macro-nonterminal">$</span><span class="macro">crate::__diesel_generate_ops_impls_if_numeric!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">column_name</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Type</span>)<span class="kw-2">*</span>);
         <span class="macro-nonterminal">$</span><span class="macro">crate::__diesel_generate_ops_impls_if_date_time!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">column_name</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Type</span>)<span class="kw-2">*</span>);
